@@ -18,23 +18,23 @@
 
 
 export interface ITime {
-  getSeconds(): number;
-  getMinutes(): number;
-  getHours(): number;
-  getDays(): number;
-  getNextSeconds(sec: number): ITime;
-  getNextMinutes(min: number): ITime;
-  getNextHours(hour: number): ITime;
-  getNextDays(day: number): ITime;
-  setSeconds(sec: number): void;
-  setMinutes(min: number): void;
-  setHours(hour: number): void;
-  setDays(day: number): void;
-  setNextSeconds(sec: number): void;
-  setNextMinutes(min: number): void;
-  setNextHours(hour: number): void;
-  setNextDays(day: number): void;
-  getValue(): number;
+  getSeconds(): number; //获取 秒（整数）
+  getMinutes(): number; //获取 分钟（整数）
+  getHours(): number; //获取 小时（整数）
+  getDays(): number; //获取 天数（整数）
+  getNextSeconds(sec: number): ITime; //生成一个 sec 秒后的 ITime
+  getNextMinutes(min: number): ITime; //生成一个 min 分钟后的 ITime
+  getNextHours(hour: number): ITime; //生成一个 hour 小时后的 ITime
+  getNextDays(day: number): ITime; //生成一个 day 天后的 ITime
+  setSeconds(sec: number): void; //设定为 0 天 0 时 0 分 sec 秒
+  setMinutes(min: number): void; //设定为 0 天 0 时 min 分 0 秒
+  setHours(hour: number): void; //设定为 0 天 hour 时 0 分 0 秒
+  setDays(day: number): void; //设定为 day 天 0 时 0 分 0 秒
+  setNextSeconds(sec: number): void; //跳到 sec 秒之后
+  setNextMinutes(min: number): void; //跳到 min 分钟之后
+  setNextHours(hour: number): void; //跳到 hour 小时之后
+  setNextDays(day: number): void; //跳到 day 天之后
+  getValue(): number; //获取 ITime 的量，比较大小时使用
 }
 export class SimpleTime implements ITime {
   seconds: number;
