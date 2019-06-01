@@ -105,6 +105,7 @@ export class SimpleTime implements ITime {
 function TestSimpleTime(): void {
   let t = new SimpleTime(11, 11, 11, 11);
   try {
+
   } catch (error) {
     throw "failure";
   }

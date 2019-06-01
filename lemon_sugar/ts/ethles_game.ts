@@ -1,10 +1,25 @@
-'use strict'
+/*:
+ * @plugindesc Game support.
+ * @author ethan miles
+ *
+ * @param
+ * @desc placehoder
+ * @default ??????
+ *
+ *
+ * @help
+ * Plugin Command:
+ * nil
+ *
+ *
+ */
 import { SimpleTime } from "./ethles_time";
 import { ITimeEvent } from "./ethles_event";
 
 interface ISubscriber {
   send(doneList: string[]): void;
 }
+
 class Game {
   gameTime: SimpleTime;
   events: ITimeEvent[];
