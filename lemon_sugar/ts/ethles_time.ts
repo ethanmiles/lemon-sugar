@@ -38,7 +38,7 @@ export interface ITime {
 }
 export class SimpleTime implements ITime {
 
-  private seconds: number;
+  private seconds!: number;
 
   constructor(
     day: number = 0,

@@ -14,7 +14,7 @@
  *
  */
 import { SimpleTime } from "./ethles_time";
-import { ITimeEvent } from "./ethles_event";
+import { ITimeEvent, IEvent } from "./ethles_event";
 
 enum ActionOnTriggered {
   CALL_COMMON_EVENT,
@@ -78,25 +78,26 @@ class RMSubscriber implements ISubscriber {
 
 class Game {
   private gameTime: SimpleTime;
-  private events: ITimeEvent[];
+  private bizEvents: IEvent[];  // 这里要不要将 时间事件和其他事件分为两类？
+  private timeEvents: ITimeEvent[];
   private subscribers: ISubscriber[];
 
   constructor() {
     this.gameTime = new SimpleTime(0, 0, 0, 0);
-    this.events = [];
+    this.timeEvents = [];
     this.subscribers = [];
   }
 
   addEvent(newEvent: ITimeEvent): void {
-    if (!this.events.some(
+    if (!this.timeEvents.some(
       (event) => { return event.getID() == newEvent.getID() }
     )) {
-      this.events.push(newEvent);
+      this.timeEvents.push(newEvent);
     }
   }
 
   removeEvent(targetID: string): void {
-    this.events = this.events.filter(
+    this.timeEvents = this.timeEvents.filter(
       (event) => {
         event.getID() != targetID
       })

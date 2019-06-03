@@ -25,8 +25,8 @@ enum EventStatus {
 }
 
 
-interface IEvent {
-  getID(): string;
+export interface IEvent {
+  getID(): string; //getID 应该返回 一个 东西, 代表这个 event 实际是什么类型。要么用 string 要么用 enum。但是 Game 不应该认识 event 的实际类型，应该是subscriber来判断。所以如果Game能通过getID返回值了解实际类型，是封装泄漏。
   isFinish(): boolean;
   stop(): void;
 }

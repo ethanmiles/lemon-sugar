@@ -11,6 +11,6 @@
  */
 
 interface ISubscriber {
-    collect(doneList: string[]): void;
+    collect(doneList: string[]): void;//这个doneList的类型不知道是传string好还是传event？传event的好处是，可以在 event具体实现上拿到更多数据，缺点是需要类型转换。
     getInterest(): string[]
 }
