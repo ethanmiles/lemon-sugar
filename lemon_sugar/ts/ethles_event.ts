@@ -38,10 +38,10 @@ export interface ITimeEvent extends IEvent {
 }
 
 export class SimpleTimeEvent implements ITimeEvent {
-  activeTime: SimpleTime;
-  status: EventStatus;
-  id: string;
-  result: boolean
+  private activeTime!: SimpleTime;
+  private status!: EventStatus;
+  private id!: string;
+  private result!: boolean
 
   constructor(id: string, activeTime: ITime) {
     this.id = id;
@@ -51,15 +51,15 @@ export class SimpleTimeEvent implements ITimeEvent {
   }
 
   getID(): string {
-    return this.id
+    return this.id;
   }
 
   getStatus(): EventStatus {
-    return this.status
+    return this.status;
   }
 
   stop(): void {
-    this.status = EventStatus.Stop
+    this.status = EventStatus.Stop;
   }
 
   isFinish(): boolean {
@@ -71,7 +71,7 @@ export class SimpleTimeEvent implements ITimeEvent {
   }
 
   fetchResult(): boolean {
-    return this.result
+    return this.result;
   }
 
   update(currentTime: ITime): void {
@@ -82,11 +82,11 @@ export class SimpleTimeEvent implements ITimeEvent {
 }
 
 export class LoopTimeEvent implements ITimeEvent {
-  activeTime: SimpleTime;
-  status: EventStatus;
-  loopInterval: SimpleTime;
-  id: string;
-  resultQueue: boolean[];
+  private activeTime!: SimpleTime;
+  private status!: EventStatus;
+  private loopInterval!: SimpleTime;
+  private id!: string;
+  private resultQueue!: boolean[];
 
   constructor(id: string, activeTime: ITime, loopInterval: ITime) {
     this.id = id;

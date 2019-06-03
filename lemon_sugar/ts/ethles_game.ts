@@ -16,14 +16,70 @@
 import { SimpleTime } from "./ethles_time";
 import { ITimeEvent } from "./ethles_event";
 
-interface ISubscriber {
-  send(doneList: string[]): void;
+enum ActionOnTriggered {
+  CALL_COMMON_EVENT,
+  MOD_BOOL_VAR,
+  MOD_INT_VAR,
+}
+
+interface IEventAction {
+  call(callee: any): void;
+  getTargetName(): string;
+}
+
+class EventAction implements IEventAction {
+  private name!: string;
+  private action!: ActionOnTriggered;
+  private targetID!: number;
+
+  constructor(name: string, action: ActionOnTriggered, targetID: number) {
+    this.name = name;
+    this.action = action;
+    this.targetID = targetID;
+  }
+
+  call(callee: any): void {
+    //TODO
+  }
+
+  getTargetName(): string {
+    return this.name;
+  }
+}
+
+class RMSubscriber implements ISubscriber {
+  private interestList!: IEventAction[];
+  private happedQueue!: string[];
+
+  constructor() {
+    this.interestList = [];
+    this.happedQueue = [];
+  }
+
+  addInterests(newInterest: IEventAction, ...otherNewInterests: IEventAction[]): void {
+    this.interestList.push(newInterest)
+    this.interestList.push(...otherNewInterests)
+  }
+
+  collect(doneList: string[]): void {
+    this.happedQueue.push(...doneList);
+    //TODO
+  }
+
+  getInterest(): string[] {
+    let res = Array(this.interestList.length);
+    for (let i of this.interestList) {
+      res.push(i.getTargetName)
+    }
+    return res;
+  }
+
 }
 
 class Game {
-  gameTime: SimpleTime;
-  events: ITimeEvent[];
-  subscribers: ISubscriber[];
+  private gameTime: SimpleTime;
+  private events: ITimeEvent[];
+  private subscribers: ISubscriber[];
 
   constructor() {
     this.gameTime = new SimpleTime(0, 0, 0, 0);
@@ -60,7 +116,7 @@ class Game {
 
     if (doneList.length > 0) {
       this.subscribers.forEach((s) => {
-        s.send(doneList)
+        s.collect(doneList)
       })
     }
   }
@@ -68,3 +124,4 @@ class Game {
 
 }
 
+export default Game;

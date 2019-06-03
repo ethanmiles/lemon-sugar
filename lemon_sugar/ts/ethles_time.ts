@@ -37,7 +37,9 @@ export interface ITime {
   getValue(): number; //获取 ITime 的量，比较大小时使用
 }
 export class SimpleTime implements ITime {
-  seconds: number;
+
+  private seconds: number;
+
   constructor(
     day: number = 0,
     hour: number = 0,
