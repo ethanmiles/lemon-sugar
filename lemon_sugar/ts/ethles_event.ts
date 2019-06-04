@@ -16,7 +16,24 @@
 
 import { ITime, SimpleTime } from "./ethles_time";
 
-enum EventStatus {
+/**
+ * EVENT_ID 具体事件类别
+ * Game 通过 EVENT_ID 管理 Subscriber 的订阅。
+ */
+export enum EVENT_ID {
+  TIME_ONCE_MOD_INT = 100,
+  TIME_ONCE_MOD_BOOL = 101,
+  TIME_ONCE_CALL_COMMON = 102,
+  TIME_LOOP_MOD_INT = 110,
+  TIME_LOOP_MOD_BOOL = 111,
+  TIME_LOOP_CALL_COMMON = 112,
+}
+
+/**
+ * EVENT_STATUS 事件状态
+ * ITimeEvent 通过 EVENT_STATUS 进行状态转换。
+ */
+enum EVENT_STATUS {
   Pending,
   Started,
   Done,
@@ -26,44 +43,44 @@ enum EventStatus {
 
 
 export interface IEvent {
-  getID(): string; //getID 应该返回 一个 东西, 代表这个 event 实际是什么类型。要么用 string 要么用 enum。但是 Game 不应该认识 event 的实际类型，应该是subscriber来判断。所以如果Game能通过getID返回值了解实际类型，是封装泄漏。
+  getID(): EVENT_ID;
   isFinish(): boolean;
   stop(): void;
 }
 
 export interface ITimeEvent extends IEvent {
   fetchResult(): boolean;
-  getStatus(): EventStatus;
+  getStatus(): EVENT_STATUS;
   update(currentTime: ITime): void;
 }
 
 export class SimpleTimeEvent implements ITimeEvent {
   private activeTime!: SimpleTime;
-  private status!: EventStatus;
-  private id!: string;
+  private status!: EVENT_STATUS;
+  private id!: EVENT_ID;
   private result!: boolean
 
-  constructor(id: string, activeTime: ITime) {
+  constructor(id: EVENT_ID, activeTime: ITime) {
     this.id = id;
     this.activeTime = new SimpleTime(0, 0, 0, activeTime.getSeconds())
-    this.status = EventStatus.Started
+    this.status = EVENT_STATUS.Started
     this.result = false;
   }
 
-  getID(): string {
+  getID(): EVENT_ID {
     return this.id;
   }
 
-  getStatus(): EventStatus {
+  getStatus(): EVENT_STATUS {
     return this.status;
   }
 
   stop(): void {
-    this.status = EventStatus.Stop;
+    this.status = EVENT_STATUS.Stop;
   }
 
   isFinish(): boolean {
-    if (this.status === EventStatus.Done || this.status === EventStatus.Error || this.status === EventStatus.Stop) {
+    if (this.status === EVENT_STATUS.Done || this.status === EVENT_STATUS.Error || this.status === EVENT_STATUS.Stop) {
       return true;
     } else {
       return false;
@@ -76,36 +93,36 @@ export class SimpleTimeEvent implements ITimeEvent {
 
   update(currentTime: ITime): void {
     if (currentTime.getValue() >= this.activeTime.getValue()) {
-      this.status = EventStatus.Done
+      this.status = EVENT_STATUS.Done
     }
   }
 }
 
 export class LoopTimeEvent implements ITimeEvent {
   private activeTime!: SimpleTime;
-  private status!: EventStatus;
+  private status!: EVENT_STATUS;
   private loopInterval!: SimpleTime;
-  private id!: string;
+  private id!: EVENT_ID;
   private resultQueue!: boolean[];
 
-  constructor(id: string, activeTime: ITime, loopInterval: ITime) {
+  constructor(id: EVENT_ID, activeTime: ITime, loopInterval: ITime) {
     this.id = id;
     this.activeTime = new SimpleTime(0, 0, 0, activeTime.getSeconds())
-    this.status = EventStatus.Started
+    this.status = EVENT_STATUS.Started
     this.resultQueue = []
     this.loopInterval = new SimpleTime(0, 0, 0, loopInterval.getSeconds())
   }
 
-  getID(): string {
+  getID(): EVENT_ID {
     return this.id
   }
 
-  getStatus(): EventStatus {
+  getStatus(): EVENT_STATUS {
     return this.status
   }
 
   isFinish(): boolean {
-    if (this.status === EventStatus.Error || this.status === EventStatus.Stop) {
+    if (this.status === EVENT_STATUS.Error || this.status === EVENT_STATUS.Stop) {
       return true;
     } else {
       return false;
@@ -113,7 +130,7 @@ export class LoopTimeEvent implements ITimeEvent {
   }
 
   stop(): void {
-    this.status = EventStatus.Stop
+    this.status = EVENT_STATUS.Stop
   }
 
   fetchResult(): boolean {

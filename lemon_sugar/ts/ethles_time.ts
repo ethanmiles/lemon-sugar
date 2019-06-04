@@ -104,10 +104,14 @@ export class SimpleTime implements ITime {
   }
 }
 
+/**
+ * UNIT TEST
+ * 
+ */
 function TestSimpleTime(): void {
   let t = new SimpleTime(11, 11, 11, 11);
   try {
-
+    //TODO
   } catch (error) {
     throw "failure";
   }
