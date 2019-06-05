@@ -36,7 +36,7 @@ class EventAction implements IEventAction {
   private targetID!: number;
 
   constructor(eventName: EVENT_ID, targetID: number) {
-    this.eventID = name;
+    this.eventID = eventName;
     this.targetID = targetID;
   }
 
