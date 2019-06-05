@@ -1,19 +1,3 @@
-/*:
- * @plugindesc Game event support.
- * @author ethan miles
- *
- * @param
- * @desc placehoder
- * @default ??????
- *
- *
- * @help
- * Plugin Command:
- * nil
- *
- *
- */
-
 import { ITime, SimpleTime } from "./ethles_time";
 
 /**
@@ -34,11 +18,11 @@ export enum EVENT_ID {
  * ITimeEvent 通过 EVENT_STATUS 进行状态转换。
  */
 enum EVENT_STATUS {
-  Pending,
-  Started,
-  Done,
-  Stop,
-  Error,
+  PENDING,
+  STARTED,
+  DONE,
+  STOP,
+  ERROR,
 }
 
 
@@ -50,7 +34,6 @@ export interface IEvent {
 
 export interface ITimeEvent extends IEvent {
   fetchResult(): boolean;
-  getStatus(): EVENT_STATUS;
   update(currentTime: ITime): void;
 }
 
@@ -63,29 +46,35 @@ export class SimpleTimeEvent implements ITimeEvent {
   constructor(id: EVENT_ID, activeTime: ITime) {
     this.id = id;
     this.activeTime = new SimpleTime(0, 0, 0, activeTime.getSeconds())
-    this.status = EVENT_STATUS.Started
+    this.setStatus(EVENT_STATUS.STARTED);
     this.result = false;
+  }
+
+  private getStatus(): EVENT_STATUS {
+    return this.status;
+  }
+
+  private setStatus(stat: EVENT_STATUS): void {
+    this.status = stat;
   }
 
   getID(): EVENT_ID {
     return this.id;
   }
 
-  getStatus(): EVENT_STATUS {
-    return this.status;
-  }
-
-  stop(): void {
-    this.status = EVENT_STATUS.Stop;
-  }
-
   isFinish(): boolean {
-    if (this.status === EVENT_STATUS.Done || this.status === EVENT_STATUS.Error || this.status === EVENT_STATUS.Stop) {
+    const stat = this.getStatus();
+    if (stat === EVENT_STATUS.DONE || stat === EVENT_STATUS.ERROR || stat === EVENT_STATUS.STOP) {
       return true;
     } else {
       return false;
     }
   }
+
+  stop(): void {
+    this.setStatus(EVENT_STATUS.STOP);
+  }
+
 
   fetchResult(): boolean {
     return this.result;
@@ -93,7 +82,7 @@ export class SimpleTimeEvent implements ITimeEvent {
 
   update(currentTime: ITime): void {
     if (currentTime.getValue() >= this.activeTime.getValue()) {
-      this.status = EVENT_STATUS.Done
+      this.status = EVENT_STATUS.DONE
     }
   }
 }
@@ -108,21 +97,28 @@ export class LoopTimeEvent implements ITimeEvent {
   constructor(id: EVENT_ID, activeTime: ITime, loopInterval: ITime) {
     this.id = id;
     this.activeTime = new SimpleTime(0, 0, 0, activeTime.getSeconds())
-    this.status = EVENT_STATUS.Started
+    this.setStatus(EVENT_STATUS.STARTED);
     this.resultQueue = []
     this.loopInterval = new SimpleTime(0, 0, 0, loopInterval.getSeconds())
+  }
+
+
+
+  private getStatus(): EVENT_STATUS {
+    return this.status
+  }
+
+  private setStatus(stat: EVENT_STATUS): void {
+    this.status = stat;
   }
 
   getID(): EVENT_ID {
     return this.id
   }
 
-  getStatus(): EVENT_STATUS {
-    return this.status
-  }
-
   isFinish(): boolean {
-    if (this.status === EVENT_STATUS.Error || this.status === EVENT_STATUS.Stop) {
+    const stat = this.getStatus()
+    if (stat === EVENT_STATUS.ERROR || stat === EVENT_STATUS.STOP) {
       return true;
     } else {
       return false;
@@ -130,7 +126,7 @@ export class LoopTimeEvent implements ITimeEvent {
   }
 
   stop(): void {
-    this.status = EVENT_STATUS.Stop
+    this.setStatus(EVENT_STATUS.STOP)
   }
 
   fetchResult(): boolean {

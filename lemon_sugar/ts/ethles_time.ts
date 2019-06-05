@@ -1,21 +1,3 @@
-'use strict'
-/*:
- * @plugindesc Game time event mode support.
- * @author ethan miles
- *
- * @param
- * @desc placehoder
- * @default ??????
- *
- *
- * @help
- * Plugin Command:
- * nil
- *
- *
- */
-
-
 
 export interface ITime {
   getSeconds(): number; //获取 秒（整数）
@@ -36,6 +18,8 @@ export interface ITime {
   setNextDays(day: number): void; //跳到 day 天之后
   getValue(): number; //获取 ITime 的量，比较大小时使用
 }
+
+
 export class SimpleTime implements ITime {
 
   private seconds!: number;
@@ -57,57 +41,53 @@ export class SimpleTime implements ITime {
   getMinutes(): number {
     return Math.floor((this.seconds / 60) % 60);
   }
-
   getHours(): number {
     return Math.floor((this.seconds / (60 * 60)) % 24);
   }
   getDays(): number {
     return Math.floor(this.seconds / (24 * 60 * 60));
   }
-  getNextSeconds(sec: number) {
+
+  getNextSeconds(sec: number): SimpleTime {
     return new SimpleTime(0, 0, 0, this.seconds + sec);
   }
-  getNextMinutes(sec: number) {
+  getNextMinutes(sec: number): SimpleTime {
     return new SimpleTime(0, 0, sec, this.seconds);
   }
-  getNextHours(hour: number) {
+  getNextHours(hour: number): SimpleTime {
     return new SimpleTime(0, hour, 0, this.seconds);
   }
-  getNextDays(day: number) {
+  getNextDays(day: number): SimpleTime {
     return new SimpleTime(day, 0, 0, this.seconds);
   }
-  setNextSeconds(sec: number) {
+
+  setNextSeconds(sec: number): void {
     this.seconds = sec;
   }
-
-  setNextMinutes(min: number) {
+  setNextMinutes(min: number): void {
     this.seconds = this.seconds + 60 * min;
   }
-  setNextHours(hour: number) {
+  setNextHours(hour: number): void {
     this.seconds = this.seconds + 60 * 60 * hour;
   }
-  setNextDays(day: number) {
+  setNextDays(day: number): void {
     this.seconds = this.seconds + 60 * 60 * 24 * day;
   }
 
-  setSeconds(sec: number) {
+  setSeconds(sec: number): void {
     this.seconds = sec;
   }
-  setMinutes(min: number) {
+  setMinutes(min: number): void {
     this.seconds = 60 * min;
   }
-  setHours(hour: number) {
+  setHours(hour: number): void {
     this.seconds = 60 * 60 * hour;
   }
-  setDays(day: number) {
+  setDays(day: number): void {
     this.seconds = 60 * 60 * 24 * day;
   }
 }
 
-/**
- * UNIT TEST
- * 
- */
 function TestSimpleTime(): void {
   let t = new SimpleTime(11, 11, 11, 11);
   try {
